@@ -1,5 +1,5 @@
 const mongoose = require("mongoose"); // 載入 mongoose
-const Todo = require('../todo')
+const Todo = require("../todo"); // 載入 todo model
 
 mongoose.connect("mongodb://localhost/todo-list"); // 設定連線到 mongoDB
 
@@ -14,9 +14,9 @@ db.on("error", () => {
 db.once("open", () => {
   console.log("mongodb connected!");
 
-  for(let i = 0; i < 10; i++) {
-    Todo.create({name: `name-${i}`})
+  for (let i = 0; i < 10; i++) {
+    Todo.create({ name: `name-${i}` });
   }
 
-  console.log('done.')
+  console.log("done.");
 });
