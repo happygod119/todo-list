@@ -9,6 +9,8 @@ const Todo = require("./models/todo"); // 載入 Todo model
 const exphbs = require("express-handlebars"); //載入handlebars
 
 const mongoose = require("mongoose"); // 載入 mongoose
+const res = require("express/lib/response");
+const todo = require("./models/todo");
 mongoose.connect("mongodb://localhost/todo-list"); // 設定連線到 mongoDB
 
 // 取得資料庫連線狀態
@@ -87,6 +89,15 @@ app.post("/todos/:id/edit", (req, res) => {
     .then(() => res.redirect(`/todos/${id}`))
     .catch((error) => console.log(error));
 });
+
+// 刪除特定 To-do
+app.post('/todos/:id/delete', (req, res) => {
+  const id = req.params.id
+  return Todo.findById(id)
+    .then((todo) => todo.remove())
+    .then(() => res.redirect("/"))
+    .catch((error) => console.log(error));
+})
 
 // 設定 port 3000
 app.listen(3000, () => {
