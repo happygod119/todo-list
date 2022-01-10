@@ -38,7 +38,7 @@ app.get("/", (req, res) => {
     .catch((error) => console.error(error)); // 錯誤處理
 });
 
-// 設定 new 路由
+// 新增一筆 To-do
 app.get("/todos/new", (req, res) => {
   return res.render("new");
 });
@@ -56,6 +56,15 @@ app.post("/todos", (req, res) => {
   //   .save()
   //   .then(() => res.redirect("/"))
   //   .catch((error) => console.log(error));
+});
+
+//瀏覽特定 To-do
+app.get("/todos/:id", (req, res) => {
+  const id = req.params.id;
+  return Todo.findById(id)
+    .lean()
+    .then((todo) => res.render("detail", { todo }))
+    .catch((error) => console.log(error));
 });
 
 // 設定 port 3000
