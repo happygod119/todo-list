@@ -60,7 +60,7 @@ app.post("/todos", (req, res) => {
   //   .catch((error) => console.log(error));
 });
 
-//瀏覽特定 To-do
+// 瀏覽特定 To-do
 app.get("/todos/:id", (req, res) => {
   const id = req.params.id;
   return Todo.findById(id)
@@ -80,10 +80,19 @@ app.get("/todos/:id/edit", (req, res) => {
 
 app.post("/todos/:id/edit", (req, res) => {
   const id = req.params.id;
-  const name = req.body.name;
+  // const name = req.body.name;
+  // const isDone = req.body.isDone;
+  const { name, isDone } = req.body; //-  解構賦值
   return Todo.findById(id)
     .then((todo) => {
       todo.name = name;
+      todo.isDone = isDone === 'on'
+      // if (isDone === "on") {
+      //   todo.isDone = true;
+      // } else {
+      //   todo.isDone = false;
+      // }
+
       return todo.save();
     })
     .then(() => res.redirect(`/todos/${id}`))
@@ -91,13 +100,13 @@ app.post("/todos/:id/edit", (req, res) => {
 });
 
 // 刪除特定 To-do
-app.post('/todos/:id/delete', (req, res) => {
-  const id = req.params.id
+app.post("/todos/:id/delete", (req, res) => {
+  const id = req.params.id;
   return Todo.findById(id)
     .then((todo) => todo.remove())
     .then(() => res.redirect("/"))
     .catch((error) => console.log(error));
-})
+});
 
 // 設定 port 3000
 app.listen(3000, () => {
