@@ -4,6 +4,8 @@ const app = express();
 
 const bodyParser = require("body-parser"); // 引用 body-parser
 
+ 
+
 const Todo = require("./models/todo"); // 載入 Todo model
 
 const exphbs = require("express-handlebars"); //載入handlebars
@@ -11,6 +13,8 @@ const exphbs = require("express-handlebars"); //載入handlebars
 const mongoose = require("mongoose"); // 載入 mongoose
 const res = require("express/lib/response");
 const todo = require("./models/todo");
+const methodOverride = require("method-override");// 載入methodOverride
+
 mongoose.connect("mongodb://localhost/todo-list"); // 設定連線到 mongoDB
 
 // 取得資料庫連線狀態
@@ -30,6 +34,8 @@ app.set("view engine", "hbs");
 
 // 用 app.use 規定每一筆請求都需要透過 body-parser 進行前置處理
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(methodOverride("_method"));
 
 // 設定首頁路由
 app.get("/", (req, res) => {
@@ -79,7 +85,7 @@ app.get("/todos/:id/edit", (req, res) => {
     .catch((error) => console.log(error));
 });
 
-app.post("/todos/:id/edit", (req, res) => {
+app.put("/todos/:id", (req, res) => {
   const id = req.params.id;
   // const name = req.body.name;
   // const isDone = req.body.isDone;
@@ -101,7 +107,7 @@ app.post("/todos/:id/edit", (req, res) => {
 });
 
 // 刪除特定 To-do
-app.post("/todos/:id/delete", (req, res) => {
+app.delete("/todos/:id", (req, res) => {
   const id = req.params.id;
   return Todo.findById(id)
     .then((todo) => todo.remove())
