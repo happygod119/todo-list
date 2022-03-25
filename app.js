@@ -7,6 +7,7 @@ const methodOverride = require("method-override"); // 載入methodOverride
 
 
 const routes = require("./routes");
+const usePassport = require("./config/passport") // 載入設定檔，要寫在 express-session 以後
 require("./config/mongoose");
 
 const app = express();
@@ -23,6 +24,8 @@ app.use(
 );
 app.use(bodyParser.urlencoded({ extended: true }));// 用 app.use 規定每一筆請求都需要透過 body-parser 進行前置處理
 app.use(methodOverride("_method"));
+
+usePassport(app) // 呼叫 Passport 函式並傳入 app，這條要寫在路由之前
 
 // 設定首頁路由
 app.use(routes);
