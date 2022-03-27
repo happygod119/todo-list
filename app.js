@@ -6,6 +6,9 @@ const bodyParser = require("body-parser"); // 引用 body-parser
 const methodOverride = require("method-override"); // 載入methodOverride
 const flash = require("connect-flash")  // 引用套件
 
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
 
 const routes = require("./routes");
 const usePassport = require("./config/passport") // 載入設定檔，要寫在 express-session 以後
@@ -18,9 +21,9 @@ app.engine("hbs", exphbs({ defaultLayout: "main", extname: ".hbs" }));
 app.set("view engine", "hbs");
 app.use(
   session({
-    secret: "ThisIsMySecret",
+    secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
   })
 );
 app.use(bodyParser.urlencoded({ extended: true }));// 用 app.use 規定每一筆請求都需要透過 body-parser 進行前置處理
